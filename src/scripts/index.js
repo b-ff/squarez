@@ -22,10 +22,16 @@ if (module.hot) {
     let initialSquaresSize;
     let minimumSquaresSize;
 
+    let dividedSquaresCount;
+    let removedSquaresCount;
 
     let getRandom = (max) => {
         return max - Math.round((Math.random() * max));
     };
+
+    let updateLiveSquaresCount = value => document.getElementById('stat_live_squares').querySelector('.stat__value').innerHTML = value;
+    let updateRemovedSquaresCount = value => document.getElementById('stat_removed_squares').querySelector('.stat__value').innerHTML = value;
+    let updateDividedSquaresCount = value => document.getElementById('stat_divided_squares').querySelector('.stat__value').innerHTML = value;
 
     let initSquare = (square) => {
         square.onDestroy((square) => {
@@ -36,13 +42,19 @@ if (module.hot) {
             });
 
             if (squareIdx >= 0 ) squares.splice(squareIdx, 1);
+
+            updateRemovedSquaresCount(removedSquaresCount++);
+            updateLiveSquaresCount(squares.length);
         });
 
         square.onDivide((newSquares) => {
             newSquares.forEach(s => initSquare(s));
+            updateDividedSquaresCount(dividedSquaresCount++);
         });
 
         squares.push(square);
+
+        updateLiveSquaresCount(squares.length);
     };
 
     let gameStart = () => {
@@ -50,6 +62,9 @@ if (module.hot) {
         isGameRunning = true;
 
         if (requestId) cancelAnimationFrame(requestId);
+
+        dividedSquaresCount = 0;
+        removedSquaresCount = 0;
 
         squares = [];
         container.innerHTML = '';
@@ -111,6 +126,12 @@ if (module.hot) {
 
     // Start button click handler
     document.getElementById('start_game').addEventListener('click', gameStart);
+
+    let startGameByEnterHit = (e) => { if (e.keyCode === 13) gameStart(); };
+
+    document.getElementById('count').addEventListener('keydown', startGameByEnterHit);
+    document.getElementById('size').addEventListener('keydown', startGameByEnterHit);
+    document.getElementById('min_size').addEventListener('keydown', startGameByEnterHit);
 
     container.addEventListener('click', (e) => {
         let offset = Math.round(initialSquaresSize / 2);

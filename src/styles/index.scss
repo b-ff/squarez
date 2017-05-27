@@ -88,10 +88,37 @@ button {
   margin: 0;
 }
 
+#game_stats {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: .5rem;
+  font-size: .6rem;
+  font-family: Helvetica Neue, Arial;
+  font-weight: 100;
+  letter-spacing: .1em;
+  color: #fff;
+  background-color: rgba(0, 0, 0, 0.4);
+  box-sizing: border-box;
+}
+
+.stat {
+  display: inline-block;
+  margin-right: 2rem;
+
+  &__title {
+    margin-right: 1rem;
+  }
+
+  &__value {
+    font-weight: 500;
+  }
+}
+
 .square {
-  display: table-cell;
+  display: block;
   position: absolute;
-  z-index: 2;
   font-family: Helvetica Neue, Arial;
   font-weight: 200;
   font-size: .6rem;
