@@ -11,14 +11,13 @@ if (module.hot) {
 (() => {
     document.getElementById('count').focus();
 
-    let speed = 1;
-    let showCycleTime = false;
+    const speed = 1;
+    const container = document.getElementById('game_area');
+    const h1 = document.getElementsByTagName('h1')[0];
 
     let requestId;
-    let container = document.getElementById('game_area');
     let isGameRunning = false;
     let squares = [];
-    let h1 = document.getElementsByTagName('h1')[0];
 
     let initialSquaresCount;
     let initialSquaresSize;
@@ -29,15 +28,15 @@ if (module.hot) {
 
     let divideSoundTimeout;
 
-    let getRandom = (max) => {
+    const updateLiveSquaresCount = v => document.getElementById('stat_live_squares').querySelector('.stat__value').innerHTML = v;
+    const updateRemovedSquaresCount = v => document.getElementById('stat_removed_squares').querySelector('.stat__value').innerHTML = v;
+    const updateDividedSquaresCount = v => document.getElementById('stat_divided_squares').querySelector('.stat__value').innerHTML = v;
+
+    const getRandom = (max) => {
         return max - Math.round((Math.random() * max));
     };
 
-    let updateLiveSquaresCount = value => document.getElementById('stat_live_squares').querySelector('.stat__value').innerHTML = value;
-    let updateRemovedSquaresCount = value => document.getElementById('stat_removed_squares').querySelector('.stat__value').innerHTML = value;
-    let updateDividedSquaresCount = value => document.getElementById('stat_divided_squares').querySelector('.stat__value').innerHTML = value;
-
-    let initSquare = (square) => {
+    const initSquare = (square) => {
         square.onDestroy((square) => {
             if (divideSoundTimeout) clearTimeout(divideSoundTimeout);
             let squareIdx = -1;
@@ -49,7 +48,7 @@ if (module.hot) {
             if (squareIdx >= 0 ) squares.splice(squareIdx, 1);
 
             divideSoundTimeout = setTimeout(() => {
-                let coinAudio = new Audio('./audio/coin.mp3');
+                const coinAudio = new Audio('./audio/coin.mp3');
                 coinAudio.load();
                 coinAudio.play();
             }, 50);
@@ -68,7 +67,7 @@ if (module.hot) {
         updateLiveSquaresCount(squares.length);
     };
 
-    let gameStart = () => {
+    const gameStart = () => {
         if (isGameRunning) return;
         isGameRunning = true;
 
@@ -102,24 +101,19 @@ if (module.hot) {
         h1.style.display = 'none';
 
         for (let i = 0; i < initialSquaresCount; i++) {
-            let x = getRandom(container.clientWidth - initialSquaresSize);
-            let y = getRandom(container.clientHeight - initialSquaresSize);
+            // @TODO add correct placing algorithm avoiding overlaps
+            const x = getRandom(container.clientWidth - initialSquaresSize);
+            const y = getRandom(container.clientHeight - initialSquaresSize);
 
             const square = new Square(initialSquaresSize, minimumSquaresSize, x, y, container, false, 10 * Math.random());
 
             initSquare(square);
         }
 
-        let time = Date.now();
-
-        let moves = () => {
+        const moves = () => {
             squares.forEach((square) => {
                 square.move(speed, squares);
             });
-
-            if (showCycleTime) console.log('cycle time (ms):', Date.now() - time);
-
-            time = Date.now();
 
             if (squares.length > 1 && isGameRunning) {
                 requestId = requestAnimationFrame(moves);
@@ -127,16 +121,17 @@ if (module.hot) {
                 if (squares.length === 1) {
                     h1.innerHTML = `#${squares[0].DOMElement.id} win!`;
 
-                    let winAudio = new Audio('./audio/win.mp3');
+                    const winAudio = new Audio('./audio/win.mp3');
                     winAudio.load();
                     winAudio.play();
                 } else {
                     h1.innerHTML = 'What have you done?! They all died!';
 
-                    let gameOverAudio = new Audio('./audio/game_over.mp3');
+                    const gameOverAudio = new Audio('./audio/game_over.mp3');
                     gameOverAudio.load();
                     gameOverAudio.play();
                 }
+
                 h1.style.display = '';
                 document.getElementById('game_form').style.display = '';
                 isGameRunning = false;
@@ -147,17 +142,19 @@ if (module.hot) {
         requestId = requestAnimationFrame(moves);
     };
 
+    const startGameByEnterHit = (e) => { if (e.keyCode === 13) gameStart(); };
+
     // Start button click handler
     document.getElementById('start_game').addEventListener('click', gameStart);
 
-    let startGameByEnterHit = (e) => { if (e.keyCode === 13) gameStart(); };
-
+    // Start game by hitting Enter key in any form field
     document.getElementById('count').addEventListener('keydown', startGameByEnterHit);
     document.getElementById('size').addEventListener('keydown', startGameByEnterHit);
     document.getElementById('min_size').addEventListener('keydown', startGameByEnterHit);
 
+    // Add new squares by clicking on game area
     container.addEventListener('click', (e) => {
-        let offset = Math.round(initialSquaresSize / 2);
+        const offset = Math.round(initialSquaresSize / 2);
         let x;
         let y;
 

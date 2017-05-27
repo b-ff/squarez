@@ -25,13 +25,11 @@ class Square {
 
         this.size = size;
         this.minSize = minSize;
-
-        this.callbacks = {};
-
         this.container = container;
-
+        this.multiplier = multiplier;
         this.coords = { x, y };
 
+        this.callbacks = {};
         this.newOne = true;
 
         this.directions = [
@@ -47,24 +45,19 @@ class Square {
 
         this.direction = (direction) ? direction : this.directions[(this.directions.length - 1) - Math.round(Math.random() * (this.directions.length - 1))];
 
-        this.multiplier = multiplier;
-
         this.directionChanged = false;
-
         this.isDestroyed = false;
 
         this.DOMElement = document.createElement('div');
-
-        this.DOMElement.style.left = this.coords.x + 'px';
-        this.DOMElement.style.top = this.coords.y + 'px';
-        this.DOMElement.style.width = size + 'px';
-        this.DOMElement.style.height = size + 'px';
+        this.DOMElement.style.left = `${this.coords.x}px`;
+        this.DOMElement.style.top = `${this.coords.y}px`;
+        this.DOMElement.style.width = `${size}px`;
+        this.DOMElement.style.height = `${size}px`;
         this.DOMElement.id = `square_${window.SQUARES_COUNT}`;
         // this.DOMElement.innerText = `#${window.SQUARES_COUNT}`;
         this.DOMElement.className = [
             'square'
         ].join(' ');
-
         this.container.appendChild(this.DOMElement);
     }
 
@@ -271,6 +264,7 @@ class Square {
 
         let multiplier = this.multiplier + 0.5;
 
+        // @TODO replace anti-science bullshit with algorithm based on vectors
         // Let's add more anti-science chaos in this algorithm
         let direction = [
             (Math.random() >= 0.5) ? { name: 'N', x: 0, y: -1 } : { name: 'NW', x: -1, y: -1 },
