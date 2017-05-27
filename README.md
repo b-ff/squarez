@@ -8,6 +8,8 @@ then press the button and just watch how they fly and crash by colliding with ea
 * Different initial speed for each square
 * Divided squares speed increases after each crash
 
+## [See the Demo](https://b-ff.github.io/squarez/dist/)
+
 ### Installation
 
 ```
