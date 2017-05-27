@@ -1,26 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>SquareZ!</title>
-<link href="styles/bundle.css" rel="stylesheet"></head>
-<body>
-<h1>Squarez!</h1>
-<div id="game_form">
-    <div class="form-row">
-        <input type="text" id="count" placeholder="Initial squares count">
-    </div>
-    <div class="form-row">
-        <input type="text" id="size" placeholder="Initial squares size">
-    </div>
-    <div class="form-row">
-        <input type="text" id="min_size" placeholder="Minimum squares size">
-    </div>
-    <div class="form-action">
-        <button id="start_game">Let the battle begins!</button>
-    </div>
-</div>
+    <head>
+        <meta charset="UTF-8">
+        <title>SquareZ!</title>
+    <link href="styles/bundle.css" rel="stylesheet"></head>
 
-<div id="game_area"></div>
-<script type="text/javascript" src="bundle.js"></script></body>
+    <body>
+        <h1>Squarez!</h1>
+
+        <div id="game_form">
+            <div class="form-row">
+                <input type="text" id="count" placeholder="Initial squares count">
+            </div>
+            <div class="form-row">
+                <input type="text" id="size" placeholder="Initial squares size">
+            </div>
+            <div class="form-row">
+                <input type="text" id="min_size" placeholder="Minimum squares size">
+            </div>
+            <div class="form-action">
+                <button id="start_game">Let the battle begins!</button>
+            </div>
+        </div>
+
+        <div id="game_area"></div>
+
+        <div id="game_stats">
+            <span id="stat_live_squares" class="stat">
+                <span class="stat__title">Live squares:</span>
+                <span class="stat__value"></span>
+            </span>
+            <span id="stat_divided_squares" class="stat">
+                <span class="stat__title">Divided squares:</span>
+                <span class="stat__value"></span>
+            </span>
+            <span id="stat_removed_squares" class="stat">
+                <span class="stat__title">Removed squares:</span>
+                <span class="stat__value"></span>
+            </span>
+        </div>
+    <script type="text/javascript" src="bundle.js"></script></body>
 </html>

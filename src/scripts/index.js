@@ -9,6 +9,8 @@ if (module.hot) {
 }
 
 (() => {
+    document.getElementById('count').focus();
+
     let speed = 1;
     let showCycleTime = false;
 
@@ -25,6 +27,8 @@ if (module.hot) {
     let dividedSquaresCount;
     let removedSquaresCount;
 
+    let divideSoundTimeout;
+
     let getRandom = (max) => {
         return max - Math.round((Math.random() * max));
     };
@@ -35,6 +39,7 @@ if (module.hot) {
 
     let initSquare = (square) => {
         square.onDestroy((square) => {
+            if (divideSoundTimeout) clearTimeout(divideSoundTimeout);
             let squareIdx = -1;
 
             squares.forEach((item, idx) => {
@@ -42,6 +47,12 @@ if (module.hot) {
             });
 
             if (squareIdx >= 0 ) squares.splice(squareIdx, 1);
+
+            divideSoundTimeout = setTimeout(() => {
+                let coinAudio = new Audio('./audio/coin.mp3');
+                coinAudio.load();
+                coinAudio.play();
+            }, 50);
 
             updateRemovedSquaresCount(removedSquaresCount++);
             updateLiveSquaresCount(squares.length);
@@ -113,7 +124,19 @@ if (module.hot) {
             if (squares.length > 1 && isGameRunning) {
                 requestId = requestAnimationFrame(moves);
             } else {
-                h1.innerHTML =  (squares.length === 1) ? `#${squares[0].DOMElement.id} win!` : 'What have you done?! They all died!';
+                if (squares.length === 1) {
+                    h1.innerHTML = `#${squares[0].DOMElement.id} win!`;
+
+                    let winAudio = new Audio('./audio/win.mp3');
+                    winAudio.load();
+                    winAudio.play();
+                } else {
+                    h1.innerHTML = 'What have you done?! They all died!';
+
+                    let gameOverAudio = new Audio('./audio/game_over.mp3');
+                    gameOverAudio.load();
+                    gameOverAudio.play();
+                }
                 h1.style.display = '';
                 document.getElementById('game_form').style.display = '';
                 isGameRunning = false;

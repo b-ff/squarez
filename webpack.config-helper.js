@@ -5,6 +5,7 @@ const Webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const ExtractSASS = new ExtractTextPlugin('styles/bundle.css');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = (options) => {
 
@@ -51,7 +52,13 @@ module.exports = (options) => {
           warnings: false
         }
       }),
-      ExtractSASS
+      ExtractSASS,
+      new CopyWebpackPlugin([{
+        from: 'src/audio',
+        to: 'audio'
+      }], {
+        copyUnmodified: true
+      })
     );
 
     webpackConfig.module.loaders.push({
